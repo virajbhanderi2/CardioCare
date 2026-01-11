@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - CardioCare AI{% endblock %}
+
+{% block content %}
+<section style="position: relative; padding: 4rem 0; min-height: 80vh; display: flex; align-items: center;">
+    <!-- Abstract Background -->
+    <div
+        style="position: absolute; top: 0; right: 0; width: 50%; height: 100%; background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1), transparent 70%); z-index: -1;">
+    </div>
+
+    <div class="container">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+
+            <!-- Left Info Side -->
+            <div class="fade-in-up">
+                <span
+                    style="color: var(--primary); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; font-size: 0.85rem;">Get
+                    in Touch</span>
+                <h1 style="font-size: 3.5rem; margin-top: 0.5rem; margin-bottom: 1.5rem;">Let's discuss your <span
+                        class="highlight">Health Solutions</span>.</h1>
+                <p style="color: var(--text-muted); font-size: 1.125rem; margin-bottom: 3rem;">
+                    Have questions about our AI technology? Our team of specialists is ready to help you navigate your
+                    journey to better heart health.
+                </p>
+
+                <div style="display: grid; gap: 2rem;">
+                    <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                        <div
+                            style="width: 50px; height: 50px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--secondary); font-size: 1.25rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom: 0.25rem;">Email Us</h4>
+                            <p style="color: var(--text-muted);">CardioCareAI@gmail.com</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                        <div
+                            style="width: 50px; height: 50px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 1.25rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom: 0.25rem;">Call Us</h4>
+                            <p style="color: var(--text-muted);">+91 82006 63823</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Form Side (Glass Card) -->
+            <div class="card fade-in-up delay-200" style="padding: 3rem;">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" class="form-control" placeholder="Jeet Bhalodi">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="jeet@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" class="form-control" rows="4"
+                            placeholder="Tell us how we can help..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                        Send Message <i class="fas fa-paper-plane" style="margin-left: 8px;"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

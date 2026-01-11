@@ -1,0 +1,538 @@
+{% extends "base.html" %}
+
+{% block title %}AI Risk Assessment | CardioCare{% endblock %}
+
+{% block content %}
+<style>
+    .assessment-wrapper {
+        padding: 3rem 1rem;
+        min-height: 80vh;
+    }
+
+    .assessment-card {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-2xl);
+        overflow: hidden;
+        border: 1px solid var(--border-light);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        padding: 2.5rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-header::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at top right, rgba(255,255,255,0.2), transparent 70%);
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .header-icon {
+        width: 4rem;
+        height: 4rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        flex-shrink: 0;
+    }
+
+    .header-text h2 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: white;
+    }
+
+    .header-text p {
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .card-body {
+        padding: 3rem;
+    }
+
+    .form-section {
+        margin-bottom: 3rem;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--border-light);
+    }
+
+    .section-dot {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--primary);
+        flex-shrink: 0;
+    }
+
+    .section-title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 0;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-label i {
+        color: var(--primary);
+        font-size: 0.875rem;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .form-control,
+    .form-select {
+        width: 100%;
+        padding: 0.875rem 1rem 0.875rem 2.75rem;
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--primary-glow);
+        background: var(--bg-primary);
+    }
+
+    .input-wrapper:focus-within .input-icon {
+        color: var(--primary);
+    }
+
+    .bmi-display {
+        grid-column: span 2;
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(16, 185, 129, 0.05));
+        border: 2px solid var(--border-light);
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 1rem;
+    }
+
+    .bmi-info {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+    }
+
+    .bmi-icon {
+        width: 3.5rem;
+        height: 3.5rem;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .bmi-text h4 {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+        margin-bottom: 0.25rem;
+        font-weight: 600;
+    }
+
+    .bmi-text p {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin: 0;
+    }
+
+    .bmi-value {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .form-actions {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 2px solid var(--border-light);
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .submit-btn {
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        color: white;
+        border: none;
+        padding: 1rem 2.5rem;
+        border-radius: var(--radius-full);
+        font-weight: 700;
+        font-size: 1.125rem;
+        cursor: pointer;
+        box-shadow: var(--shadow-lg);
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .trust-badge {
+        text-align: center;
+        margin-top: 2rem;
+        padding: 1rem;
+        font-size: 0.875rem;
+        color: var(--text-muted);
+    }
+
+    .trust-badge i {
+        color: var(--secondary);
+        margin-right: 0.5rem;
+    }
+
+    #resultSection {
+        margin-top: 2rem;
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 2rem 1.5rem;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .bmi-display {
+            grid-column: span 1;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+
+        .header-content {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+
+<div class="assessment-wrapper">
+    <div class="assessment-card fade-in-up">
+        <div class="card-header">
+            <div class="header-content">
+                <div class="header-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="header-text">
+                    <h2>Cardiovascular Risk Assessment</h2>
+                    <p>AI-Powered Predictive Analysis • Version 2.0</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <form id="predictionForm">
+                <!-- Patient Vitals -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-dot" style="background: var(--primary);"></div>
+                        <h3 class="section-title">Patient Vitals</h3>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-venus-mars"></i>
+                                Gender
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-venus-mars input-icon"></i>
+                                <select name="gender" class="form-select">
+                                    <option value="0">Female</option>
+                                    <option value="1">Male</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-birthday-cake"></i>
+                                Age (Years)
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-birthday-cake input-icon"></i>
+                                <input type="number" name="Age_Year" class="form-control" value="45" min="10" max="120" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-ruler-vertical"></i>
+                                Height (cm)
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-ruler-vertical input-icon"></i>
+                                <input type="number" id="height" name="height" class="form-control" value="170" min="100" max="250" required oninput="calculateBMI()">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-weight"></i>
+                                Weight (kg)
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-weight input-icon"></i>
+                                <input type="number" id="weight" name="weight" class="form-control" value="75" min="30" max="200" required oninput="calculateBMI()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clinical Metrics -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-dot" style="background: var(--secondary);"></div>
+                        <h3 class="section-title">Clinical Metrics</h3>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Systolic BP (mmHg)
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-tachometer-alt input-icon"></i>
+                                <input type="number" name="ap_hi" class="form-control" value="120" min="70" max="250" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Diastolic BP (mmHg)
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-tachometer-alt input-icon"></i>
+                                <input type="number" name="ap_lo" class="form-control" value="80" min="40" max="180" required>
+                            </div>
+                        </div>
+
+                        <div class="bmi-display">
+                            <div class="bmi-info">
+                                <div class="bmi-icon">
+                                    <i class="fas fa-calculator"></i>
+                                </div>
+                                <div class="bmi-text">
+                                    <h4>Body Mass Index</h4>
+                                    <p>Automatically calculated from height and weight</p>
+                                </div>
+                            </div>
+                            <div id="bmiDisplay" class="bmi-value">25.95</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lifestyle Profile -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-dot" style="background: var(--accent);"></div>
+                        <h3 class="section-title">Lifestyle Profile</h3>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-vial"></i>
+                                Cholesterol Level
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-vial input-icon"></i>
+                                <select name="cholesterol" class="form-select">
+                                    <option value="1">Normal</option>
+                                    <option value="2">Above Normal</option>
+                                    <option value="3">High</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-cube"></i>
+                                Glucose Level
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-cube input-icon"></i>
+                                <select name="gluc" class="form-select">
+                                    <option value="1">Normal</option>
+                                    <option value="2">Above Normal</option>
+                                    <option value="3">High</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-smoking"></i>
+                                Smoking Status
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-smoking input-icon"></i>
+                                <select name="smoke" class="form-select">
+                                    <option value="0">Non-Smoker</option>
+                                    <option value="1">Smoker</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-running"></i>
+                                Physical Activity
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-running input-icon"></i>
+                                <select name="active" class="form-select">
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-wine-glass-alt"></i>
+                                Alcohol Intake
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-wine-glass-alt input-icon"></i>
+                                <select name="alco" class="form-select">
+                                    <option value="0">None</option>
+                                    <option value="1">Regular</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">
+                        Run Predictive Analysis
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+
+            <div id="resultSection" style="display:none;">
+                <div id="resultContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="trust-badge">
+        <i class="fas fa-lock"></i>
+        End-to-end encrypted · HIPAA Compliant Processing
+    </div>
+</div>
+
+<script>
+    function calculateBMI() {
+        const height = document.getElementById('height').value;
+        const weight = document.getElementById('weight').value;
+        const display = document.getElementById('bmiDisplay');
+
+        if (height > 0 && weight > 0) {
+            const bmi = weight / Math.pow(height / 100, 2);
+            display.innerText = bmi.toFixed(2);
+        } else {
+            display.innerText = '--';
+        }
+    }
+
+    calculateBMI();
+</script>
+
+{% endblock %}

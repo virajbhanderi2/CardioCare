@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Important Legal Disclaimer - CardioCare AI{% endblock %}
+
+{% block content %}
+<section
+    style="padding: 6rem 0; min-height: 85vh; display: flex; align-items: center; justify-content: center; position: relative;">
+
+    <!-- Red Alert Background Accent -->
+    <div
+        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%; max-width: 800px; background: radial-gradient(circle, rgba(239, 68, 68, 0.15), transparent 70%); z-index: -1; pointer-events: none;">
+    </div>
+
+    <div class="container">
+        <div class="card fade-in-up"
+            style="max-width: 900px; margin: 0 auto; border-left: 6px solid #ef4444; position: relative; overflow: hidden;">
+
+            <!-- Watermark Icon -->
+            <div
+                style="position: absolute; top: -20px; right: -20px; font-size: 15rem; color: rgba(239, 68, 68, 0.03); transform: rotate(15deg); pointer-events: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <div
+                    style="width: 80px; height: 80px; background: #fee2e2; color: #ef4444; font-size: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.1); animation: pulse 2s infinite;">
+                    <i class="fas fa-heart-crack"></i>
+                </div>
+                <h1 style="color: #991b1b; margin-bottom: 0.5rem;">Critical Medical Disclaimer</h1>
+                <p
+                    style="color: #b91c1c; font-weight: 600; font-size: 1.1rem; letter-spacing: 1px; text-transform: uppercase;">
+                    Please Read Carefully</p>
+            </div>
+
+            <div style="display: grid; gap: 2rem;">
+                <!-- Section 1 -->
+                <div style="display: flex; gap: 1.5rem;">
+                    <div
+                        style="flex-shrink: 0; width: 40px; height: 40px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                        1</div>
+                    <div>
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Not a Medical Device</h3>
+                        <p style="color: var(--text-muted);">
+                            The CardioCare AI platform is an educational tool based on statistical models. <strong>It is
+                                not a diagnostic instrument.</strong> The results provided by this system do not
+                            constitute a medical diagnosis.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Section 2 -->
+                <div style="display: flex; gap: 1.5rem;">
+                    <div
+                        style="flex-shrink: 0; width: 40px; height: 40px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                        2</div>
+                    <div>
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Consult a Professional</h3>
+                        <p style="color: var(--text-muted);">
+                            Always verify these results with a board-certified cardiologist. Never disregard
+                            professional medical advice or delay seeking treatment because of something you have read on
+                            this website.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Section 3 -->
+                <div style="display: flex; gap: 1.5rem;">
+                    <div
+                        style="flex-shrink: 0; width: 40px; height: 40px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                        3</div>
+                    <div>
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Emergency Situations</h3>
+                        <p style="color: var(--text-muted);">
+                            If you are experiencing chest pain, shortness of breath, or other symptoms of a heart
+                            attack, <strong>call emergency services (911) immediately.</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                style="margin-top: 3rem; text-align: center; padding-top: 2rem; border-top: 1px solid rgba(0,0,0,0.05);">
+                <a href="{{ url_for('home') }}" class="btn"
+                    style="background: #0f172a; color: white; padding: 1rem 3rem;">
+                    I Understand & Agree <i class="fas fa-check" style="margin-left: 8px;"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+        }
+
+        70% {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 15px rgba(239, 68, 68, 0);
+        }
+
+        100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+        }
+    }
+</style>
+{% endblock %}
